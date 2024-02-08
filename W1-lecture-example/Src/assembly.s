@@ -13,7 +13,9 @@ byte_array: .byte 0, 1, 2, 3, 4, 5, 6
 
 
 
-@ this is the entry function called from the c file
+@ this is the entry function called from the startup file
+@ it replaces the c main function that was removed when we made
+@ this project
 main:
 
 	LDR R0, =0x1234
