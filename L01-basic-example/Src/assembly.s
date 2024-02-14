@@ -9,7 +9,7 @@
 .text
 @ define code
 
-@ this is the entry function called from the c file
+@ this is the entry function called from the startup file
 main:
 
 	LDR R0, =0x1234
