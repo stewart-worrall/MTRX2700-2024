@@ -11,10 +11,10 @@ enable_peripheral_clocks:
 	@ load the address of the RCC address boundary (for enabling the IO clock)
 	LDR R0, =RCC
 
-	@ enable all of the GPIO peripherals
-	LDR R1, [R0, #AHBENR]  @ load the current value of the peripheral clock registers
+	@ enable all of the GPIO peripherals in AHBENR
+	LDR R1, [R0, #AHBENR]
 	ORR R1, 1 << GPIOE_ENABLE | 1 << GPIOD_ENABLE | 1 << GPIOC_ENABLE | 1 << GPIOB_ENABLE | 1 << GPIOA_ENABLE  @ enable GPIO
-	STR R1, [R0, #AHBENR]  @ store the modified register back to the submodule
+	STR R1, [R0, #AHBENR]
 
 	BX LR @ return
 
@@ -32,7 +32,6 @@ enable_uart:
 	LDR R0, =GPIOC
 
 	@ set the alternate function for the UART pins (what ever you have selected)
-	LDRB R1, [R0, AFRL + 2]
 	LDR R1, =0x77
 	STRB R1, [R0, AFRL + 2]
 
@@ -128,16 +127,17 @@ wait_for_PLLRDY:
 @ PWREN (enable power to the clock), SYSCFGEN system clock enable
 initialise_power:
 
-	@ enable clock power
 	LDR R0, =RCC @ the base address for the register to turn clocks on/off
-	LDR R1, [R0, #APB1ENR] @ load the original value from the enable register
-	ORR R1, 1 << PWREN @ apply the bit mask for power enable
-	STR R1, [R0, #APB1ENR] @ store the modified enable register values back to RCC
 
-	@ enable clock config
-	LDR R1, [R0, #APB2ENR] @ load the original value from the enable register
+	@ enable clock power in APB1ENR
+	LDR R1, [R0, #APB1ENR]
+	ORR R1, 1 << PWREN @ apply the bit mask for power enable
+	STR R1, [R0, #APB1ENR]
+
+	@ enable clock config in APB2ENR
+	LDR R1, [R0, #APB2ENR]
 	ORR R1, 1 << SYSCFGEN @ apply the bit mask to allow clock configuration
-	STR R1, [R0, #APB2ENR] @ store the modified enable register values back to RCC
+	STR R1, [R0, #APB2ENR]
 
 	BX LR @ return
 

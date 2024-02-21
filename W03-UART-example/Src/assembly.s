@@ -39,15 +39,20 @@ main:
 	BL enable_peripheral_clocks
 	BL enable_uart
 
-	@ initialise the buffer and counter
-	LDR R6, =incoming_buffer
-	LDR R7, =incoming_counter
-	LDRB R7, [R7]
-	MOV R8, #0x00
-
 	@ uncomment the next line to enter a transmission loop
 	@B tx_loop
 
+
+	@ To read in data, we need to use a memory buffer to store the incoming bytes
+	@ Get pointers to the buffer and counter memory areas
+	LDR R6, =incoming_buffer
+	LDR R7, =incoming_counter
+
+	@ dereference the memory for the maximum buffer size, store it in R7
+	LDRB R7, [R7]
+
+	@ Keep a pointer that counts how many bytes have been received
+	MOV R8, #0x00
 
 
 @ continue reading forever (NOTE: eventually it will run out of memory as we don't have a big buffer)
@@ -87,19 +92,24 @@ no_reset:
 
 clear_error:
 
-	LDR R1, [R0, USART_ICR] @ load the status of the UART
-	@ Clear the overrun/frame error flag (see page 897)
-	ORR R1, 1 << UART_ORECF | 1 << UART_FECF
-	STR R1, [R0, USART_ICR] @ load the status of the UART
+	@ Clear the overrun/frame error flag in the register USART_ICR (see page 897)
+	LDR R1, [R0, USART_ICR]
+	ORR R1, 1 << UART_ORECF | 1 << UART_FECF @ clear the flags (by setting flags to 1)
+	STR R1, [R0, USART_ICR]
 	B loop_forever
 
 
 tx_loop:
 
-	LDR R0, =UART @ the base address for the register to set up UART
+	@ the base address for the register to set up UART
+	LDR R0, =UART
 
+	@ load the memory addresses of the buffer and length information
 	LDR R3, =tx_string
 	LDR R4, =tx_length
+
+	@ dereference the length variable
+	@ notice how memory address R4 is replaced by the value that was at that memory address
 	LDR R4, [R4]
 
 
@@ -130,11 +140,14 @@ tx_uart:
 	B tx_loop
 
 
+@ a very simple delay
+@ you will need to find better ways of doing this
 delay_loop:
 	LDR R9, =0xfffff
 
 delay_inner:
-
+	@ notice the SUB has an S on the end, this means it alters the condition register
+	@ and can be used to make a branching decision.
 	SUBS R9, #1
 	BGT delay_inner
 	BX LR @ return from function call
