@@ -1,7 +1,7 @@
 .syntax unified
 .thumb
 
-.global assembly_function
+.global main
 
 #include "initialise.s"
 
@@ -23,7 +23,7 @@ tx_length: .byte 8
 
 
 @ this is the entry function called from the c file
-assembly_function:
+main:
 
 @ run the functions to perform the config of the ports
 	BL initialise_power
@@ -38,12 +38,12 @@ assembly_function:
 	MOV R8, #0x00
 
 	@ uncomment the next line to enter a transmission loop
-	@B tx_loop
+	B tx_loop
 
 @ continue reading forever (NOTE: eventually it will run out of memory as we don't have a big buffer
 loop_forever:
 
-	LDR R0, =UART4 @ the base address for the register to set up UART4
+	LDR R0, =UART1 @ the base address for the register to set up UART4
 	LDR R1, [R0, USART_ISR] @ load the status of the UART4
 
 	TST R1, 1 << UART_ORE | 1 << UART_FE  @ 'AND' the current status with the bit mask that we are interested in

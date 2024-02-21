@@ -20,30 +20,30 @@ enable_peripheral_clocks:
 @ BAUD rate needs to change depending on whether it is 8MHz (external clock) or 24MHz (our PLL setting)
 enable_uart4:
 	LDR R0, =GPIOC
-	MOV R1, 0x55	@ set the alternate function for the UART4 pins (PC10 and PC11)
-	STRB R1, [R0, AFRH + 1]
+	MOV R1, 0x77	@ set the alternate function for the UART4 pins (PC10 and PC11)
+	STRB R1, [R0, AFRL + 2]
 
-	LDR R1, =0x00A00000 @ Mask for pins PC10 and PC11 to use the alternate function
+	LDR R1, =0xA00 @ Mask for pins PC10 and PC11 to use the alternate function
 	STR R1, [R0, GPIO_MODER]
 
-	LDR R1, =0x00F00000 @ Set the speed for PC10 and PC11 to use high speed
+	LDR R1, =0xF00 @ Set the speed for PC10 and PC11 to use high speed
 	STR R1, [R0, GPIO_OSPEEDR]
 
 	@ UART4EN is bit number 19, we need to turn the clock on for this
 	LDR R0, =RCC @ the base address for the register to turn clocks on/off
-	LDR R1, [R0, #APB1ENR] @ load the original value from the enable register
-	ORR R1, 1 << UART4EN  @ apply the bit mask to the previous values of the enable UART4
-	STR R1, [R0, #APB1ENR] @ store the modified enable register values back to RCC
+	LDR R1, [R0, #APB2ENR] @ load the original value from the enable register
+	ORR R1, 1 << USART1EN  @ apply the bit mask to the previous values of the enable UART4
+	STR R1, [R0, #APB2ENR] @ store the modified enable register values back to RCC
 
 	@ this is the baud rate
 @	MOV R1, #0xD0 @ from our earlier calculations (for 24MHz), store this in register R1
 	MOV R1, #0x46 @ from our earlier calculations (for 8MHz), store this in register R1
-	LDR R0, =UART4 @ the base address for the register to turn clocks on/off
+	LDR R0, =UART1 @ the base address for the register to turn clocks on/off
 	STRH R1, [R0, #USART_BRR] @ store this value directly in the first half word (16 bits) of
 							  	 @ the baud rate register
 
 	@ we want to set a few things here, lets define their bit positions to make it more readable
-	LDR R0, =UART4 @ the base address for the register to set up UART4
+	LDR R0, =UART1 @ the base address for the register to set up UART4
 	LDR R1, [R0, #USART_CR1] @ load the original value from the enable register
 	ORR R1, 1 << UART_TE | 1 << UART_RE | 1 << UART_UE @ make a bit mask with a '1' for the bits to enable,
 													   @ apply the bit mask to the previous values of the enable register

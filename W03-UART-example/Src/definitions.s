@@ -7,16 +7,17 @@
 .equ APB1ENR, 0x1C
 .equ APB2ENR, 0x18
 .equ AFRH, 0x24
+.equ AFRL, 0x20
 .equ RCC_CR, 0x00 @ control clock register
 .equ RCC_CFGR, 0x04 @ configure clock register
 
 @ register addresses and offsets for UART4
-.equ UART4, 0x40004C00 @ from peripheral register memory boundary in the big manual
+.equ UART1, 0x40013800 @ from peripheral register memory boundary in the big manual
 .equ USART_CR1, 0x00
 .equ USART_BRR, 0x0C
 .equ USART_ISR, 0x1C @ UART status register offset
 .equ USART_ICR, 0x20 @ UART clear flags for errors
-.equ UART4EN, 19  @ specific bit to enable UART4
+.equ USART1EN, 0x14  @ specific bit to enable UART1
 .equ UART_TE, 3	@ transmit enable bit
 .equ UART_RE, 2	@ receive enable bit
 .equ UART_UE, 0	@ enable bit for the whole UART
