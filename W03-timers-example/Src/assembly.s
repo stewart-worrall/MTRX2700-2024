@@ -9,7 +9,7 @@
 .data
 @ define variables
 on_time: .word 0x10000
-off_time: .word 0x80000
+period: .word 0x80000
 
 
 
@@ -35,6 +35,7 @@ main:
 	MOV R1, #0x04 @ put a prescaler in R1
 	STR R1, [R0, TIM_PSC] @ set the prescaler register
 
+	@ see the notes in the trigger_prescaler function
 	BL trigger_prescaler
 
 	@ questions for timed_loop
@@ -48,70 +49,55 @@ pwm_loop:
 	LDR R1, =on_time
 	LDR R1, [R1]
 
-	LDR R2, =off_time
+	LDR R2, =period
 	LDR R2, [R2]
 
 
-pwm_start:
+pwm_on_cycle:
 	@ reset the counter
 	LDR R0, =TIM2
 	LDR R8, =0x00
 	STR R8, [R0, TIM_CNT]
 
+	@ update the on_time
+	ADD R1, #0x5000
+
+	@ if on_time > period, reset on_time (Register 1)
+	CMP R2, R1
+	BGT no_reset
+	MOV R1, #0
+
+no_reset:
 	LDR R0, =GPIOE  @ load the address of the GPIOE register into R0
 	STRB R7, [R0, #ODR + 1]   @ store this to the second byte of the ODR (bits 8-15)
 
-pwm_loop_inner:
-	@ load the current time from the counter
+@ load the current time from the counter
+@ and wait until on_time has elapsed
+pwm_on_loop:
 	LDR R0, =TIM2  @ load the address of the timer 2 base address
-	LDR R6, [R0, TIM_CNT]
+	LDR R6, [R0, TIM_CNT]	@ read current time
 
+	@ compare current time to on_time (R1)
 	CMP R6, R1
-	BGT pwm_turned_off
+	BGT pwm_off_cycle
 
-	B pwm_loop_inner
-
-
+	B pwm_on_loop
 
 
-pwm_turned_off:
+@ turn off the LEDs and
+pwm_off_cycle:
 	LDR R0, =GPIOE  @ load the address of the GPIOE register into R0
-	MOV R3, 0x00
-	STRB R3, [R0, #ODR + 1]   @ store this to the second byte of the ODR (bits 8-15)
+	MOV R4, 0x00
+	STRB R4, [R0, #ODR + 1]   @ store this to the second byte of the ODR (bits 8-15)
 
+pwm_off_loop:
+	LDR R0, =TIM2  @ load the address of the timer 2 base address
+	LDR R6, [R0, TIM_CNT]	@ read current time
+
+	@ compare current time to period (R2)
 	CMP R6, R2
-	BGT pwm_start
+	BGT pwm_on_cycle
 
-	B pwm_loop_inner
+	B pwm_off_loop
 
 
-
-trigger_prescaler:
-
-	@ Use (TIMx_EGR) instead (to reset the clock)
-
-	@ This is a hack to get the prescaler to take affect
-	@ the prescaler is not changed until the counter overflows
-	@ the TIMx_ARR register sets the count at which the overflow
-	@ happens. Here, the reset is triggered and the overflow
-	@ occurs to make the prescaler take effect.
-	@ you should use a different approach to this !
-
-	@ In your code, you should be using the ARR register to
-	@ set the maximum count for the timer
-
-	@ store a value for the prescaler
-	LDR R0, =TIM2	@ load the base address for the timer
-
-	LDR R1, =0x1 @ make the timer overflow after counting to only 1
-	STR R1, [R0, TIM_ARR] @ set the ARR register
-
-	LDR R8, =0x00
-	STR R8, [R0, TIM_CNT] @ reset the clock
-	NOP
-	NOP
-
-	LDR R1, =0xffffffff @ set the ARR back to the default value
-	STR R1, [R0, TIM_ARR] @ set the ARR register
-
-	BX LR

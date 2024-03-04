@@ -3,9 +3,9 @@
 
 #include "definitions.s"
 
-.global enable_timer2_clock
-.global enable_peripheral_clocks
-.global initialise_discovery_board
+#.global enable_timer2_clock
+#.global enable_peripheral_clocks
+#.global initialise_discovery_board
 
 .text
 @ define code
@@ -36,3 +36,35 @@ initialise_discovery_board:
 	STRH R1, [R0, #MODER + 2]   @ store the new register values in the top half word representing
 								@ the MODER settings for pe8-15
 	BX LR @ return from function call
+
+
+
+trigger_prescaler:
+
+	@ Use (TIMx_EGR) instead (to reset the clock)
+
+	@ This is a hack to get the prescaler to take affect
+	@ the prescaler is not changed until the counter overflows
+	@ the TIMx_ARR register sets the count at which the overflow
+	@ happens. Here, the reset is triggered and the overflow
+	@ occurs to make the prescaler take effect.
+	@ you should use a different approach to this !
+
+	@ In your code, you should be using the ARR register to
+	@ set the maximum count for the timer
+
+	@ store a value for the prescaler
+	LDR R0, =TIM2	@ load the base address for the timer
+
+	LDR R1, =0x1 @ make the timer overflow after counting to only 1
+	STR R1, [R0, TIM_ARR] @ set the ARR register
+
+	LDR R8, =0x00
+	STR R8, [R0, TIM_CNT] @ reset the clock
+	NOP
+	NOP
+
+	LDR R1, =0xffffffff @ set the ARR back to the default value
+	STR R1, [R0, TIM_ARR] @ set the ARR register
+
+	BX LR
