@@ -32,7 +32,7 @@ main:
 
 	@ store a value for the prescaler
 	LDR R0, =TIM2	@ load the base address for the timer
-	MOV R1, #0x04 @ put a prescaler in R1
+	MOV R1, #0x02 @ put a prescaler in R1
 	STR R1, [R0, TIM_PSC] @ set the prescaler register
 
 	@ see the notes in the trigger_prescaler function
