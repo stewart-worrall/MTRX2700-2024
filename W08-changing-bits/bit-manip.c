@@ -33,29 +33,17 @@ typedef union {
 void printRegisterBreakdown(RegisterBreakdown reg) {
     printf("Word: 0x%08X\n", reg.word);
     
-    printf("Bytes: 0x%02X 0x%02X 0x%02X 0x%02X\n", reg.bytes.byte1, 
-		    reg.bytes.byte2, reg.bytes.byte3, reg.bytes.byte4);
+    printf("Bytes: 0x%02X 0x%02X 0x%02X 0x%02X\n", reg.bytes.byte1, reg.bytes.byte2, reg.bytes.byte3, reg.bytes.byte4);
     
     printf("Config:\n");
     
     printf("  Reserved: 0x%04X\n", reg.config.reserved);
     
-    printf("  Enable: %u, InterruptEnable: %u, 
-		    ModeSelect: %u, ClockSource: %u, ClockDivider: %u\n",
-           reg.config.bits.enable, reg.config.bits.interruptEnable, 
-	   reg.config.bits.modeSelect, reg.config.bits.clockSource, 
-	   reg.config.bits.clockDivider);
+    printf("  Enable: %u, InterruptEnable: %u, ModeSelect: %u, ClockSource: %u, ClockDivider: %u\n", reg.config.bits.enable, reg.config.bits.interruptEnable, reg.config.bits.modeSelect, reg.config.bits.clockSource, reg.config.bits.clockDivider);
     
-    printf("  Reset: %u, DataDirection: %u, PullUpEnable: %u, 
-		    PowerDown: %u, DiagnosticEnable: %u\n",
-           reg.config.bits.reset, reg.config.bits.dataDirection, 
-	   reg.config.bits.pullUpEnable, reg.config.bits.powerDown, 
-	   reg.config.bits.diagnosticEnable);
+    printf("  Reset: %u, DataDirection: %u, PullUpEnable: %u, PowerDown: %u, DiagnosticEnable: %u\n", reg.config.bits.reset, reg.config.bits.dataDirection, reg.config.bits.pullUpEnable, reg.config.bits.powerDown, reg.config.bits.diagnosticEnable);
     
-    printf("  FilterEnable: %u, OutputDrive: %u, InputInvert: %u, 
-		    ReservedBit: %u\n",
-           reg.config.bits.filterEnable, reg.config.bits.outputDrive, 
-	   reg.config.bits.inputInvert, reg.config.bits.reservedBit);
+    printf("  FilterEnable: %u, OutputDrive: %u, InputInvert: %u, ReservedBit: %u\n", reg.config.bits.filterEnable, reg.config.bits.outputDrive, reg.config.bits.inputInvert, reg.config.bits.reservedBit);
     
     printf("\n");
 }

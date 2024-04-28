@@ -1,0 +1,12 @@
+[PreviousGenFiles]
+SourcePath=../Src
+SourceFiles=F3-components.c;
+
+[PreviousLibFiles]
+LibFiles=Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f303xc.h;Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f3xx.h;Drivers/CMSIS/Device/ST/STM32F3xx/Include/system_stm32f3xx.h;Drivers/CMSIS/Device/ST/STM32F3xx/Source/Templates/system_stm32f3xx.c;Drivers/CMSIS/Include/mpu_armv8.h;Drivers/CMSIS/Include/core_cm4.h;Drivers/CMSIS/Include/core_cm7.h;Drivers/CMSIS/Include/core_cm3.h;Drivers/CMSIS/Include/cmsis_iccarm.h;Drivers/CMSIS/Include/core_armv8mml.h;Drivers/CMSIS/Include/core_sc000.h;Drivers/CMSIS/Include/cmsis_armcc.h;Drivers/CMSIS/Include/core_cm0.h;Drivers/CMSIS/Include/cmsis_compiler.h;Drivers/CMSIS/Include/core_cm0plus.h;Drivers/CMSIS/Include/cmsis_armclang.h;Drivers/CMSIS/Include/cmsis_version.h;Drivers/CMSIS/Include/core_cm1.h;Drivers/CMSIS/Include/mpu_armv7.h;Drivers/CMSIS/Include/cmsis_gcc.h;Drivers/CMSIS/Include/core_cm33.h;Drivers/CMSIS/Include/core_cm23.h;Drivers/CMSIS/Include/tz_context.h;Drivers/CMSIS/Include/core_sc300.h;Drivers/CMSIS/Include/core_armv8mbl.h;
+
+[PreviousUsedCubeIDEFiles]
+SourceFiles=Src/F3-components.c;Drivers/CMSIS/Device/ST/STM32F3xx/Source/Templates/system_stm32f3xx.c;Src/stm32f3xx_hal_conf_template.h;Drivers/CMSIS/Device/ST/STM32F3xx/Source/Templates/system_stm32f3xx.c;Src/stm32f3xx_hal_conf_template.h;;;
+HeaderPath=Drivers/CMSIS/Device/ST/STM32F3xx/Include;Drivers/CMSIS/Include;Inc;Drivers/STM32F3xx_HAL_Driver/Inc;Drivers/STM32F3xx_HAL_Driver/Inc/Legacy;
+CDefines=USE_HAL_DRIVER;STM32F303xC;USE_HAL_DRIVER;USE_HAL_DRIVER;
+

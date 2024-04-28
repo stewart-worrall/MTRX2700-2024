@@ -172,6 +172,12 @@ void SerialOutputBuffer(uint8_t *buffer, uint16_t buffer_length, SerialPort *ser
 		buffer++;
 	}
 
+	// This code was added as the python reading program was not picking
+	//  up the next sentinel properly. This should be removed when the
+	//  python code is fixed.
+	uint8_t complete_buffer = '\0';
+	SerialOutputChar(&complete_buffer, serial_port);
+
 //	if (serial_port->completion_function != 0x00)
 //		serial_port->completion_function(counter);
 }

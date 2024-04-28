@@ -35,7 +35,7 @@ main:
 	@ for more details on changing the UART, refer to the week 3 live lecture/tutorial session.
 
 	BL initialise_power
-	@BL change_clock_speed
+	BL change_clock_speed
 	BL enable_peripheral_clocks
 	BL enable_uart
 

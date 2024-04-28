@@ -100,9 +100,6 @@ int main(void)
   MX_USB_PCD_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-  //RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIOEEN;
-  //uint16_t *led_output_registers = ((uint16_t *)&(GPIOE->MODER)) + 1;
-  //*led_output_registers = 0x5555;
 
   /* USER CODE END 2 */
 
@@ -112,15 +109,18 @@ int main(void)
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
 
+
+
+
   while (1)
   {
 	if ((GPIOA->IDR & 0x01) == 0) {
       TIM2->CCR1 = 1100;
-      TIM2->CCR2 = 1900;
+      TIM2->CCR2 = 1100;
 	}
 	else {
-      TIM2->CCR1 = 1900;
-      TIM2->CCR2 = 1100;
+      TIM2->CCR1 = 1400;
+      TIM2->CCR2 = 1900;
 	}
 
     /* USER CODE END WHILE */
@@ -287,7 +287,7 @@ static void MX_TIM2_Init(void)
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 47;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 20000;
+  htim2.Init.Period = 1500;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
@@ -301,7 +301,7 @@ static void MX_TIM2_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 1500;
+  sConfigOC.Pulse = 750;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)

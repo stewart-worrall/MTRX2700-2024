@@ -153,6 +153,14 @@ int main(void)
 {
 	/* USER CODE BEGIN 1 */
 
+	// PTU Pin wiring
+	//  2 x grounds between stm32 and PTU
+	//  PA1 and PA15 are TIM2 channels 1 and 2. These are used to drive
+	//    the PWM for the PTU
+	//  PA8 is TIM1 channel 1, this is used for the LASPWM (the laser PWM signal)
+	//  PB6 is I2C1 clock (SCL on the PTU), PB7 is I2C1 data (SDA on the PTU)
+
+
 	// look at the size difference between these structs,
 	//  they are because the 32 bit microcontroller
 	//  packs the data so the divisions are in groups

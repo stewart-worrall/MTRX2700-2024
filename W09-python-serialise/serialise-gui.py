@@ -121,14 +121,16 @@ class SerialReader(QThread):
 
             while True:
                 message_type, data = receive_and_unpack_buffer(ser)
+                print (str(message_type))
 
                 if message_type == MessageType.SENSOR_DATA:
                     sensor_data = struct.unpack('<iiiiiiII', data)
                     self.data_received.emit(list(sensor_data))
-                    #print('Sensor:', sensor_data)
+                    print('Sensor:', sensor_data)
 
                 elif message_type == MessageType.BUTTON_AND_STATUS:
                     sensor_data = struct.unpack('<B', data)
+                    print ("received button status" + str(data))
 
                     if (sensor_data[0] & 0x01 == 1):
                         self.color_change.emit(True)

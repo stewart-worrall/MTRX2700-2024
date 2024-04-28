@@ -132,7 +132,7 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
-	// Pin wiring
+	// PTU Pin wiring
 	//  2 x grounds between stm32 and PTU
 	//  PA1 and PA15 are TIM2 channels 1 and 2. These are used to drive
 	//    the PWM for the PTU
